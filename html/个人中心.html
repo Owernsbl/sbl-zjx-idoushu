@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>个人中心</title>
+		<link rel="stylesheet" href="../css/footer.css">
+		<link rel="stylesheet" href="../css/header.css">
+		<link rel="stylesheet" href="../css/base.css">
+		<link rel="stylesheet" href="../css/normalize.css">
+		<link rel="icon" sizes="any" mask="" href="//ci.xiaohongshu.com/953e8240-67d1-4d6d-94f3-fa699ad27b9a">
+		<script src="../js/common.js"></script>
+		<script src="../js/jquery-1.8.2.js"></script>
+		<script>
+			// 打开弹窗
+			document.addEventListener('DOMContentLoaded', function() {
+				const balanceElement = document.querySelector('.balance'); // 声明一次
+				console.log("current",balanceElement.textContent.replace('余额：¥', ''))
+				let currentBalance = parseFloat(balanceElement.textContent.replace('余额：¥', ''));
+				console.log("currentBalance",currentBalance)
+				// 检查 localStorage 中的 price 值
+				const storedPrice = parseFloat(localStorage.getItem('price'));
+				if (!isNaN(storedPrice) && storedPrice > 0) {
+					let displayBalance = currentBalance; // 用于显示累加动画的变量
+					const increment = storedPrice / 100; // 增量，用于控制动画效果
+					console.log("displayBalance",displayBalance)
+					console.log("displayBalance",increment)
+					const interval = setInterval(() => {
+						if (displayBalance >= currentBalance + storedPrice) {
+							clearInterval(interval); // 动画结束
+							balanceElement.textContent =
+							`余额：¥${(currentBalance + storedPrice).toFixed(2)}`; // 设置最终值
+						} else {
+							displayBalance += increment;
+							balanceElement.textContent = `余额：¥${displayBalance.toFixed(2)}`;
+						}
+					}, 20); // 控制动画速度
+
+					// 累加完成后清除 localStorage 中的 price
+					localStorage.removeItem('price');
+				}
+				document.getElementById('changePasswordBtn').addEventListener('click', function() {
+					document.getElementById('modal').style.display = 'flex';
+				});
+			});
+
+			// 更新密码并显示成功提示动画
+			function updatePassword() {
+				const newPassword = document.getElementById('newPassword').value;
+				const confirmPassword = document.getElementById('confirmPassword').value;
+				if (newPassword === confirmPassword && newPassword !== '') {
+					document.getElementById('successMessage').style.display = 'block';
+					setTimeout(() => {
+						document.getElementById('modal').style.display = 'none';
+						document.getElementById('successMessage').style.display = 'none';
+					}, 2000); // 成功提示2秒后自动关闭
+				} else {
+					alert('请确认密码输入一致！');
+				}
+			}
+
+			// 点击弹窗外部关闭弹窗
+			window.onclick = function(event) {
+				if (event.target == document.getElementById('modal')) {
+					document.getElementById('modal').style.display = 'none';
+				}
+			}
+		</script>
+		<style>
+			.personal-center {
+				width: 80%;
+				margin: 64px auto;
+				padding: 20px;
+				background-color: #f9f9f9;
+				border-radius: 8px;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+				font-family: Arial, sans-serif;
+			}
+
+			.personal-center h2 {
+				font-size: 24px;
+				margin-bottom: 20px;
+				color: #333;
+				border-bottom: 2px solid #e1e1e1;
+				padding-bottom: 10px;
+			}
+
+			.profile {
+				display: flex;
+				align-items: center;
+				margin-bottom: 20px;
+			}
+
+			.profile .avatar {
+				width: 80px;
+				height: 80px;
+				border-radius: 50%;
+				margin-right: 20px;
+				border: 2px solid #e1e1e1;
+			}
+
+			.user-info p {
+				font-size: 16px;
+				color: #555;
+				margin: 5px 0;
+			}
+
+			.user-info .balance {
+				font-weight: bold;
+				color: #3a87ad;
+			}
+
+			.section {
+				margin-top: 20px;
+			}
+
+			.section h3 {
+				font-size: 20px;
+				color: #333;
+				margin-bottom: 10px;
+				border-bottom: 1px solid #e1e1e1;
+				padding-bottom: 5px;
+			}
+
+			.section ul {
+				list-style-type: none;
+				padding: 0;
+			}
+
+			.section ul li {
+				font-size: 16px;
+				color: #555;
+				margin: 10px 0;
+				padding: 10px;
+				border-bottom: 1px solid #e1e1e1;
+			}
+
+			.section ul li a {
+				color: #3a87ad;
+				text-decoration: none;
+			}
+
+			.section ul li a:hover {
+				text-decoration: underline;
+			}
+
+
+
+
+			.modal {
+				display: none;
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.6);
+				justify-content: center;
+				align-items: center;
+				animation: fadeIn 0.5s;
+			}
+
+			.modal-content {
+				background-color: #fff;
+				padding: 20px;
+				width: 300px;
+				border-radius: 8px;
+				text-align: center;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+				animation: scaleUp 0.3s ease-out;
+			}
+
+			.modal-content h3 {
+				margin-top: 0;
+			}
+
+			.modal-content input {
+				width: 100%;
+				padding: 8px;
+				margin: 8px 0;
+				border-radius: 4px;
+				border: 1px solid #ddd;
+			}
+
+			.modal-content button {
+				padding: 10px 20px;
+				background-color: #3a87ad;
+				color: #fff;
+				border: none;
+				border-radius: 4px;
+				cursor: pointer;
+				margin-top: 10px;
+			}
+
+			/* 成功提示动画 */
+			.success-message {
+				display: none;
+				font-size: 18px;
+				color: green;
+				animation: fadeInOut 2s ease;
+			}
+
+			@keyframes fadeIn {
+				from {
+					opacity: 0;
+				}
+
+				to {
+					opacity: 1;
+				}
+			}
+
+			@keyframes scaleUp {
+				from {
+					transform: scale(0.8);
+				}
+
+				to {
+					transform: scale(1);
+				}
+			}
+
+			@keyframes fadeInOut {
+
+				0%,
+				100% {
+					opacity: 0;
+				}
+
+				50% {
+					opacity: 1;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<!-- Header部分 -->
+		<div class="header">
+			<div class="header_logo">
+				<img src="../images/87681a4d-9b81-4c14-aecc-ead27a4d7952.png" alt="">
+			</div>
+			<div class="header_middle">
+				<a href="首页.html" title="小红书_首页">首页</a>
+				<a href="社区精选.html" title="小红书_社区精选">社区精选</a>
+				<a href="关于我们.html" title="小红书_关于我们">关于我们</a>
+				<a href="联系我们.html" title="小红书_加入我们">加入我们</a>
+				<a href="招商合作.html" title="小红书_招商合作">招商合作</a>
+				<a href="品牌账号.html" title="小红书_品牌账号">品牌账号</a>
+				<a href="个人中心.html" title="小红书_个人中心">个人中心</a>
+			</div>
+		</div>
+
+		<!-- 个人中心内容 -->
+		<div class="personal-center">
+			<h2>个人中心</h2>
+			<div class="profile">
+				<img src="../images/touxiang.jpg" alt="用户头像" class="avatar">
+				<div class="user-info">
+					<p>用户名：张三</p>
+					<p>邮箱：zhangsan@example.com</p>
+					<p>手机：123-456-7890</p>
+					<p class="balance">余额：¥500.00</p>
+				</div>
+			</div>
+
+			<div class="section account-settings">
+				<h3>账号设置</h3>
+				<ul>
+					<li><a id="changePasswordBtn">修改密码</a></li>
+					<li><a href="#">绑定手机</a></li>
+					<li><a href="#">隐私设置</a></li>
+				</ul>
+			</div>
+
+			<div class="section order-history">
+				<h3>订单历史</h3>
+				<ul>
+					<li>订单号：12345678 - 状态：已完成</li>
+					<li>订单号：87654321 - 状态：待发货</li>
+					<li>订单号：11223344 - 状态：已取消</li>
+				</ul>
+			</div>
+		</div>
+
+		<!-- 弹窗结构 -->
+		<div id="modal" class="modal">
+			<div class="modal-content">
+				<h3>修改密码</h3>
+				<input type="password" placeholder="输入旧密码" id="oldPassword">
+				<input type="password" placeholder="输入新密码" id="newPassword">
+				<input type="password" placeholder="确认新密码" id="confirmPassword">
+				<button onclick="updatePassword()">确认修改</button>
+				<p class="success-message" id="successMessage">密码修改成功！</p>
+			</div>
+		</div>
+
+		<!-- Footer部分 -->
+		<div class="footer">
+			<div class="footer_top">
+				<div class="footer_inner">
+					<div class="left fl">
+						<img class="footer_logo" src="../images/881ae53d-2f84-4257-86c3-10e9805ad19f.png" title=""
+							alt="">
+						<div class="icon-btn">
+							<a href=""><span id="wx"></span><img id="wxe"
+									src="../images/c6e68107-edae-41b2-85af-1644cf5988ad%20(1).jpg" alt=""></a>
+							<a href="//weibo.com/xhsapp?refer_flag=1001030101_"><span></span></a>
+							<a
+								href="https://itunes.apple.com/cn/app/%E5%B0%8F%E7%BA%A2%E4%B9%A6-%E6%A0%87%E8%AE%B0%E6%88%91%E7%9A%84%E7%94%9F%E6%B4%BB/id741292507?mt=8"><span></span>ios</a>
+							<a href="https://www.wandoujia.com/apps/com.xingin.xhs"><span></span>安卓</a>
+						</div>
+					</div>
+					<div class="right fr">
+						<div class="beed fl">
+							<span></span>
+							<div class="tab">
+								<span>公司相关</span>
+								<a href="" title="小红书_加入我们">加入我们</a>
+								<a href="招商合作.html" title="小红书_招商合作">招商合作</a>
+								<a href="关于我们.html" title="小红书_关于我们">关于我们</a>
+							</div>
+						</div>
+						<div class="beed fl">
+							<span></span>
+							<div class="tab">
+								<span>内容相关</span>
+								<a href="社区精选.html" title="小红书_社区精选">社区精选</a>
+								<a href="" title="小红书_媒体报道">媒体报道</a>
+							</div>
+						</div>
+						<div class="beed fl">
+							<span></span>
+							<div class="tab">
+								<span>协议条款</span>
+								<a href="" title="小红书_注册协议">注册协议</a>
+								<a href="" title="小红书_隐私协议">隐私协议</a>
+								<a href="" title="小红书_侵权投诉指引">侵权投诉指引</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="inner-bottom">
+				<div class="inner">
+					<div class="info">
+						<a target="_blank" href="" title="小红书_沪ICP备">沪ICP备 13030189号 Copyright ©
+							2014-<span>2018</span>行吟信息科技（上海）有限公司</a>
+						<span>| 地址：上海市黄浦区马当路388号C座</span>
+						<span>| 电话：021-64224530</span> | <a target="_blank" href=""> 自营经营者营业执照</a>
+						<a target="_blank" href="" title="小红书_沪公网安备"><span>2018</span> 沪公网安备 31010102002533号<i
+								class="police"></i></a>
+					</div>
+					<div class="info">
+						<span title="小红书_网文">沪网文〔2018〕4086-308号</span> | <a target="_blank" href=""
+							title="小红书_网络文化经营许可"> 网络文化经营许可证：沪网文[2018]4086-308号</a> |
+						<a target="_blank" href="" title="小红书_网文">增值电信业务经营许可证：沪B2-20150021</a> |
+						<a target="_blank" href="" title="小红书_食品经营">食品经营许可证：JY13101140093802</a> |
+						<a target="_blank" href="" title="小红书_出版物经营">出版物经营许可证：新出发沪零字第M7553号</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

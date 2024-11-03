@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>仿拼多多红包摆动</title>
+  <style>
+    .small {
+      position: fixed;
+      bottom: 80px;
+      right: 10px;
+      height: 118px;
+      width: 120px;
+      background: none;
+      animation: swing 0.5s linear infinite;
+      transform: rotate(0deg);
+      cursor: pointer;
+    }
+
+    @keyframes swing {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      10% {
+        transform: rotate(-10deg);
+      }
+
+      20% {
+        transform: rotate(0deg);
+      }
+
+      30% {
+        transform: rotate(10deg);
+      }
+
+      40% {
+        transform: rotate(0deg);
+      }
+
+      50% {
+        transform: rotate(-10deg);
+      }
+
+      60% {
+        transform: rotate(0deg);
+      }
+
+      70% {
+        transform: rotate(10deg);
+      }
+
+      80% {
+        transform: rotate(0deg);
+      }
+
+      90% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(0deg);
+      }
+    }
+
+    /* 弹窗样式 */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 300px;
+      padding: 20px;
+      background-color: lightblue;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      text-align: center;
+      z-index: 1000;
+    }
+
+    .modal h2 {
+      margin: 0 0 10px;
+    }
+
+    .modal p {
+      margin: 10px 0 20px;
+    }
+
+    .modal button {
+      padding: 8px 16px;
+      background-color: #f76b1c;
+      color: lawngreen;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* 模态背景 */
+    .modal-background {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 红包图片 -->
+  <img class="small" src="https://resource.tuixb.cn/test/mp_51dcd190-834c-11e9-8444-018b79c0e985/default/f82aaf97-0fbc-4a7e-afc9-ad9a11277924.png" id="redEnvelope" />
+
+  <!-- 弹窗内容 -->
+  <div class="modal-background" id="modalBackground"></div>
+  <div class="modal" id="modal">
+    <h2>恭喜您！</h2>
+    <p>您获得了一个红包！点击领取。</p>
+    <button onclick="closeModal()">关闭</button>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 绑定点击事件到红包图片
+      document.getElementById('redEnvelope').onclick = function() {
+        openModal();
+      };
+
+      // 绑定点击事件到背景遮罩
+      document.getElementById('modalBackground').onclick = function() {
+        closeModal();
+      };
+    });
+
+    // 打开弹窗函数
+    function openModal() {
+      document.getElementById('modal').style.display = 'block';
+      document.getElementById('modalBackground').style.display = 'block';
+    }
+
+    // 关闭弹窗函数
+    function closeModal() {
+      document.getElementById('modal').style.display = 'none';
+      document.getElementById('modalBackground').style.display = 'none';
+    }
+  </script>
+</body>
+
+</html>
